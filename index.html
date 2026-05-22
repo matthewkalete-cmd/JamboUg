@@ -3,204 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matooke and Mist | The One-Page Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Matooke & Mist | The Soul of Uganda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #FFCE00;
-            --accent: #E52B50;
-            --bg: #0a0b0a;
-            --card-bg: #161816;
+            --primary: #FFCE00; /* Gold */
+            --accent: #E52B50;  /* Crane Red */
+            --forest: #1b3022;  /* Deep Forest */
+            --bg: #080908;      /* Pure Charcoal */
+            --card-bg: #121412;
             --text: #ffffff;
-            --glass: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.03);
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
+        /* Base Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            overflow-x: hidden; 
+            line-height: 1.5;
+        }
 
-        /* --- LOADING ICON --- */
+        /* --- 1. SOPHISTICATED LOADER --- */
         #loader {
             position: fixed; inset: 0; background: var(--bg); z-index: 10000;
             display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
-        .loader-circle {
-            width: 60px; height: 60px; border: 2px solid var(--glass);
-            border-top: 2px solid var(--primary); border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .loader-logo {
+            font-family: 'Syne', sans-serif; font-size: 1.5rem; letter-spacing: 8px;
+            color: var(--primary); animation: glow 2s ease-in-out infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-bar {
+            width: 150px; height: 1px; background: var(--glass); margin-top: 20px; position: relative; overflow: hidden;
+        }
+        .loader-progress {
+            position: absolute; height: 100%; width: 50%; background: var(--primary);
+            animation: progress 1.5s infinite;
+        }
+        @keyframes progress { 0% { left: -50%; } 100% { left: 100%; } }
+        @keyframes glow { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* --- CUSTOM CURSOR --- */
+        /* --- 2. MAGNETIC LIQUID CURSOR --- */
         #cursor {
-            width: 15px; height: 15px; background: var(--primary); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference;
-            transition: transform 0.1s;
+            width: 10px; height: 10px; background: var(--primary); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: width 0.3s, height 0.3s, background 0.3s;
+        }
+        #cursor-follower {
+            width: 40px; height: 40px; border: 1px solid var(--primary); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9998;
+            transition: all 0.15s ease-out;
         }
 
-        /* --- HERO --- */
+        /* --- 3. MINIMAL NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 40px 6%;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        }
+        .logo { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; }
+        .logo span { color: var(--primary); }
+        .nav-link { font-size: 0.7rem; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; color: var(--primary); }
+
+        /* --- 4. HERO SECTION --- */
         .hero {
             height: 100vh; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1600&q=80') center/cover;
-            text-align: center;
+            background: radial-gradient(circle at center, rgba(255, 206, 0, 0.03) 0%, transparent 70%);
+            position: relative; overflow: hidden;
         }
-        .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 12vw, 8rem); text-transform: uppercase; }
-
-        /* --- SECTIONS --- */
-        .content-section { padding: 100px 6%; }
-        .section-title { font-family: 'Syne', sans-serif; font-size: 3rem; margin-bottom: 50px; border-left: 5px solid var(--primary); padding-left: 20px; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-
-        /* --- INTERACTIVE CARDS --- */
-        .card {
-            height: 400px; background: var(--card-bg); border-radius: 30px; overflow: hidden;
-            position: relative; border: 1px solid var(--glass); transition: 0.4s;
+        .hero-title {
+            font-family: 'Syne', sans-serif; font-size: clamp(4rem, 18vw, 12rem);
+            line-height: 0.85; text-transform: uppercase; text-align: center;
+            z-index: 2; position: relative;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--primary); }
-        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: 0.5s; }
-        .card:hover img { opacity: 0.9; scale: 1.1; }
+        .hero-title span { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
 
-        .card-label { position: absolute; bottom: 30px; left: 30px; z-index: 2; }
-        .card-label h3 { font-family: 'Syne', sans-serif; font-size: 1.8rem; }
-        .btn-view { margin-top: 10px; font-size: 0.7rem; letter-spacing: 2px; color: var(--primary); text-transform: uppercase; font-weight: bold; display: block; }
+        /* --- 5. BENTO CONTENT SECTION --- */
+        .section { padding: 120px 6%; }
+        .label { font-size: 0.7rem; letter-spacing: 5px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block; }
+        .heading { font-family: 'Syne', sans-serif; font-size: 4rem; line-height: 1; margin-bottom: 60px; max-width: 600px; }
 
-        /* --- MODAL SYSTEM --- */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px);
-            z-index: 2000; display: none; justify-content: center; align-items: center; padding: 40px;
+        /* Advanced Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 300px;
+            gap: 25px;
+        }
+        .bento-item {
+            background: var(--card-bg); border-radius: 40px; overflow: hidden;
+            position: relative; border: 1px solid var(--glass);
+            transition: var(--transition);
+        }
+        .bento-item:hover { transform: scale(0.98); border-color: var(--primary); }
+        
+        /* Grid Sizing Styles */
+        .large { grid-column: span 2; grid-row: span 2; }
+        .tall { grid-row: span 2; }
+        .wide { grid-column: span 2; }
+
+        .bento-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: 0.8s; }
+        .bento-item:hover img { opacity: 0.8; transform: scale(1.05); }
+
+        .meta { position: absolute; bottom: 30px; left: 30px; }
+        .meta h3 { font-family: 'Syne', sans-serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .meta p { font-size: 0.7rem; letter-spacing: 2px; color: var(--primary); text-transform: uppercase; }
+
+        /* --- 6. MODERN MODAL --- */
+        #modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px);
+            z-index: 11000; display: none; align-items: center; justify-content: center; padding: 40px;
         }
         .modal-content {
-            background: var(--card-bg); max-width: 800px; width: 100%; border-radius: 40px;
-            padding: 60px; position: relative; border: 1px solid var(--glass);
-            transform: translateY(50px); opacity: 0; transition: 0.5s;
+            background: var(--card-bg); max-width: 1000px; width: 100%; border-radius: 50px;
+            display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden;
+            border: 1px solid var(--glass); opacity: 0; transform: translateY(30px); transition: 0.5s;
         }
-        .modal-overlay.active { display: flex; }
-        .modal-overlay.active .modal-content { transform: translateY(0); opacity: 1; }
+        .modal-img { background-size: cover; background-position: center; min-height: 500px; }
+        .modal-text { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .modal-text h2 { font-family: 'Syne', sans-serif; font-size: 3.5rem; color: var(--primary); margin-bottom: 20px; }
+        .close-btn { position: absolute; top: 40px; right: 40px; color: var(--text); font-size: 2rem; }
 
-        .close-modal { position: absolute; top: 30px; right: 40px; font-size: 2rem; color: var(--primary); cursor: pointer; }
-        .modal-body h2 { font-family: 'Syne', sans-serif; font-size: 3rem; margin-bottom: 20px; color: var(--primary); }
-        .modal-body p { font-size: 1.1rem; line-height: 1.8; opacity: 0.8; }
+        /* --- 7. ETIQUETTE (THE DARK BLOCK) --- */
+        .etiquette-box {
+            background: #111; border-radius: 60px; padding: 80px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px;
+        }
+        .eti-item h4 { font-family: 'Syne', sans-serif; color: var(--primary); margin-bottom: 10px; }
+        .eti-item p { font-size: 0.9rem; opacity: 0.6; }
 
-        footer { padding: 80px 6%; background: #050505; text-align: center; opacity: 0.5; font-size: 0.8rem; }
-
-        /* REVEAL ANIMATION */
-        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .bento-grid { grid-template-columns: repeat(1, 1fr); grid-auto-rows: 400px; }
+            .large, .tall, .wide { grid-column: span 1; grid-row: span 1; }
+            .modal-content { grid-template-columns: 1fr; }
+            .modal-img { height: 250px; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="loader"><div class="loader-circle"></div></div>
+    <div id="loader">
+        <div class="loader-logo">MATOOKE & MIST</div>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
+    </div>
+
     <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+
+    <nav>
+        <div class="logo">MATOOKE<span>&MIST</span></div>
+        <div class="nav-link">Uganda 2026</div>
+    </nav>
 
     <header class="hero">
-        <h1>MATOOKE <br>& MIST</h1>
+        <h1 class="hero-title">MATOOKE<br><span>& MIST</span></h1>
     </header>
 
-    <section class="content-section reveal">
-        <h2 class="section-title">The People & Beauty</h2>
-        <p style="font-size: 1.3rem; max-width: 800px; line-height: 1.8; opacity: 0.7;">
-            Uganda is more than a destination; it's a heartbeat. From the snow-capped Rwenzoris to the emerald islands of Lake Bunyonyi, our land is a masterpiece. But the true beauty lies in the warmth of over 56 tribes, united by hospitality and the legendary "Ubuntu" spirit.
+    <section class="section reveal">
+        <span class="label">Introduction</span>
+        <h2 class="heading">The People, The Beauty, The Pulse.</h2>
+        <p style="max-width: 800px; font-size: 1.4rem; font-weight: 300; opacity: 0.8;">
+            Uganda is a masterclass in nature and hospitality. From the misty heights of the Rwenzori Mountains to the rhythmic pulse of Kampala’s streets, this is a land of 56 tribes united by the spirit of **Ubuntu**. It is a place where every sunset feels like a new beginning.
         </p>
     </section>
 
-    <section class="content-section">
-        <h2 class="section-title">6 Iconic Flavors</h2>
-        <div class="grid">
-            <div class="card reveal" onclick="openModal('Luwombo', 'The Royal masterpiece. Meat slow-steamed in smoked banana leaves for hours to reach a smoky, tender perfection. Historically served only to royalty, now the pride of every celebration.')">
-                <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Luwombo</h3><span class="btn-view">Explore Dish</span></div>
+    <section class="section">
+        <span class="label">Section 01</span>
+        <h2 class="heading">6 Iconic Flavors</h2>
+        <div class="bento-grid">
+            <div class="bento-item large reveal" onclick="openModal('Luwombo', 'The Royal masterpiece. Meat slow-steamed in smoked banana leaves for hours to reach a smoky, tender perfection. A taste of Buganda heritage.', 'https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Signature</p><h3>Luwombo</h3></div>
             </div>
-            <div class="card reveal" onclick="openModal('The Rolex', 'Uganda\'s most famous street food. A rolled omelet packed with fresh veggies and wrapped in a warm chapati. It is the 24-hour energy of Kampala.')">
-                <img src="https://images.unsplash.com/photo-1626700051175-656fc7bc31ee?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>The Rolex</h3><span class="btn-view">Explore Dish</span></div>
+            <div class="bento-item tall reveal" onclick="openModal('The Rolex', 'Kampala\'s favorite street fuel. A vegetable-infused omelet rolled in a fresh, hot chapati. It is the heart of the city.', 'https://images.unsplash.com/photo-1626700051175-656fc7bc31ee?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1626700051175-656fc7bc31ee?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Street</p><h3>Rolex</h3></div>
             </div>
-            <div class="card reveal" onclick="openModal('Matooke', 'The green-gold staple. High-altitude bananas peeled, wrapped in leaves, and steamed until soft and golden. It is the foundation of the Ugandan diet.')">
-                <img src="https://images.unsplash.com/photo-1528825831135-33b1b7a09dec?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Matooke</h3><span class="btn-view">Explore Dish</span></div>
+            <div class="bento-item reveal" onclick="openModal('Matooke', 'The green-gold staple of the highlands. Steamed and mashed to soft perfection, it is the soul of every meal.', 'https://images.unsplash.com/photo-1528825831135-33b1b7a09dec?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1528825831135-33b1b7a09dec?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Staple</p><h3>Matooke</h3></div>
             </div>
-            <div class="card reveal" onclick="openModal('Malewa', 'A delicacy of the East. Smoked bamboo shoots harvested from Mt. Elgon, usually cooked in a rich, creamy peanut sauce. Earthy, smoky, and unforgettable.')">
-                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Malewa</h3><span class="btn-view">Explore Dish</span></div>
+            <div class="bento-item wide reveal" onclick="openModal('Eshabwe', 'An elegant ghee-based sauce from Western Uganda. Smooth, white, and prestigious, traditionally served during cattle-culture ceremonies.', 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>West</p><h3>Eshabwe</h3></div>
             </div>
-            <div class="card reveal" onclick="openModal('Eshabwe', 'A sophisticated ghee sauce from Western Uganda. Silky white and served cold, it is a sign of cattle-culture prestige and delicate flavor.')">
-                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Eshabwe</h3><span class="btn-view">Explore Dish</span></div>
+            <div class="bento-item reveal" onclick="openModal('Malewa', 'Smoked bamboo shoots from the East. Harvested from the slopes of Mt. Elgon, usually prepared in a rich groundnut stew.', 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>East</p><h3>Malewa</h3></div>
             </div>
-            <div class="card reveal" onclick="openModal('Kalo', 'Millet bread at its finest. Nutritious, dense, and served hot with groundnut stew. It is the fuel of warriors and the heart of northern and eastern dining.')">
-                <img src="https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Kalo</h3><span class="btn-view">Explore Dish</span></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="content-section">
-        <h2 class="section-title">5 Natural Wonders</h2>
-        <div class="grid">
-            <div class="card reveal" onclick="openModal('Bwindi Forest', 'A prehistoric rainforest and UNESCO site. Home to half of the world\'s mountain gorillas. Trekking through the mist here is a life-changing pilgrimage.')">
-                <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Bwindi Forest</h3><span class="btn-view">Explore Site</span></div>
-            </div>
-            <div class="card reveal" onclick="openModal('Murchison Falls', 'The world\'s most powerful waterfall. The Nile is forced through a 7-meter gorge before exploding into the devil\'s cauldron below.')">
-                <img src="https://images.unsplash.com/photo-1533230408708-8f9f91d12344?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Murchison Falls</h3><span class="btn-view">Explore Site</span></div>
-            </div>
-            <div class="card reveal" onclick="openModal('Lake Bunyonyi', 'The lake of a thousand birds. Studded with 29 islands, this bilharzia-free lake is the deepest in Uganda and the perfect place for peace.')">
-                <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Lake Bunyonyi</h3><span class="btn-view">Explore Site</span></div>
-            </div>
-            <div class="card reveal" onclick="openModal('Rwenzori Peaks', 'The Mountains of the Moon. Permanent snow right on the Equator. This is Africa\'s highest non-volcanic range and a hiker\'s ultimate challenge.')">
-                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>Rwenzori Peaks</h3><span class="btn-view">Explore Site</span></div>
-            </div>
-            <div class="card reveal" onclick="openModal('The Nile Source', 'Where the longest journey begins. In Jinja, the Nile rippling out of Lake Victoria marks the birth of the river that built civilizations.')">
-                <img src="https://images.unsplash.com/photo-1518218811728-66a9f8348827?auto=format&fit=crop&w=600&q=80">
-                <div class="card-label"><h3>The Nile Source</h3><span class="btn-view">Explore Site</span></div>
+            <div class="bento-item reveal" onclick="openModal('Kalo', 'Millet bread, the warriors fuel. Thick, nutritious, and perfectly paired with traditional stews.', 'https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Ancient</p><h3>Kalo</h3></div>
             </div>
         </div>
     </section>
 
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <section class="section">
+        <span class="label">Section 02</span>
+        <h2 class="heading">5 Natural Wonders</h2>
+        <div class="bento-grid">
+            <div class="bento-item tall reveal" onclick="openModal('Bwindi Forest', 'A prehistoric rainforest home to half of the worlds mountain gorillas. It is an impenetrable sanctuary of mist.', 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Wild</p><h3>Bwindi</h3></div>
+            </div>
+            <div class="bento-item large reveal" onclick="openModal('Murchison Falls', 'The Nile forced through a 7-meter gorge. It is the most powerful waterfall on Earth, creating a thunderous roar.', 'https://images.unsplash.com/photo-1533230408708-8f9f91d12344?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1533230408708-8f9f91d12344?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Nile</p><h3>Murchison</h3></div>
+            </div>
+            <div class="bento-item reveal" onclick="openModal('Lake Bunyonyi', 'The lake of little birds. Deep, island-studded, and serenely beautiful in the southwest highlands.', 'https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Peace</p><h3>Bunyonyi</h3></div>
+            </div>
+            <div class="bento-item reveal" onclick="openModal('Rwenzori Peaks', 'The Mountains of the Moon. Permanent snow on the Equator and some of Africas most rewarding trekking.', 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Adventure</p><h3>Rwenzori</h3></div>
+            </div>
+            <div class="bento-item wide reveal" onclick="openModal('Source of the Nile', 'In Jinja, witness the ripples of the Nile as it begins its long journey north out of Lake Victoria.', 'https://images.unsplash.com/photo-1518218811728-66a9f8348827?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1518218811728-66a9f8348827?auto=format&fit=crop&w=800&q=80">
+                <div class="meta"><p>Origin</p><h3>The Nile</h3></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section reveal">
+        <span class="label">Cultural Wisdom</span>
+        <h2 class="heading">Traveling with Respect</h2>
+        <div class="etiquette-box">
+            <div class="eti-item"><h4>Handshakes</h4><p>Use the right hand for greetings and exchanges. It is the hand of honor and respect.</p></div>
+            <div class="eti-item"><h4>Modesty</h4><p>Ugandans value appearance. Modest dress is appreciated when visiting rural homes.</p></div>
+            <div class="eti-item"><h4>Grace</h4><p>Always accept a small portion of food if offered; it is the ultimate sign of friendship.</p></div>
+            <div class="eti-item"><h4>Patience</h4><p>Greetings aren't just words; they are an investment in the day. Take your time.</p></div>
+        </div>
+    </section>
+
+    <div id="modal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <div class="modal-body" id="modalBody">
-                <h2 id="modalTitle">Title</h2>
-                <p id="modalDesc">Description goes here...</p>
+            <div class="modal-img" id="modalImg"></div>
+            <div class="modal-text">
+                <div class="close-btn" onclick="closeModal()">×</div>
+                <h2 id="mTitle"></h2>
+                <p id="mDesc"></p>
             </div>
         </div>
     </div>
 
-    <footer>&copy; 2026 Matooke & Mist | Authentically Ugandan</footer>
+    <footer style="padding: 100px 6%; text-align: center; border-top: 1px solid var(--glass);">
+        <p style="opacity: 0.3; font-size: 0.7rem; letter-spacing: 2px;">© 2026 MATOOKE & MIST | THE PEARL OF AFRICA</p>
+    </footer>
 
     <script>
-        // Custom Cursor
+        // 1. Dual Cursor Logic
         const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+        
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
+            
+            // Follower lag effect
+            setTimeout(() => {
+                follower.style.left = e.clientX - 15 + 'px';
+                follower.style.top = e.clientY - 15 + 'px';
+            }, 50);
         });
 
-        // Modal Logic
-        function openModal(title, desc) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalDesc').innerText = desc;
-            document.getElementById('modalOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Stop scroll
+        // 2. Magnetic Scaling on interactive elements
+        document.querySelectorAll('.bento-item, .nav-link, .close-btn').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(6)';
+                follower.style.transform = 'scale(0)';
+                cursor.style.background = 'white';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                follower.style.transform = 'scale(1)';
+                cursor.style.background = 'var(--primary)';
+            });
+        });
+
+        // 3. Modal System
+        function openModal(title, desc, img) {
+            document.getElementById('mTitle').innerText = title;
+            document.getElementById('mDesc').innerText = desc;
+            document.getElementById('modalImg').style.backgroundImage = `url(${img})`;
+            const modal = document.getElementById('modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.querySelector('.modal-content').style.opacity = '1', 10);
+            setTimeout(() => modal.querySelector('.modal-content').style.transform = 'translateY(0)', 10);
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-            document.body.style.overflow = 'auto'; // Resume scroll
+            const modal = document.getElementById('modal');
+            modal.querySelector('.modal-content').style.opacity = '0';
+            modal.querySelector('.modal-content').style.transform = 'translateY(30px)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 400);
         }
 
-        // Loader
+        // 4. Loading Sequence
         window.addEventListener('load', () => {
-            setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 1500);
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
+            }, 2000);
         });
 
-        // Scroll Reveal
+        // 5. Scroll Reveal
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
