@@ -3,175 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matooke and Mist | The Soul of Uganda</title>
+    <title>Matooke and Mist | Uganda Unveiled</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --mist: #f4f4f4;
-            --forest: #1b3022;
-            --gold: #ffce00;
-            --accent: #e52b50;
-            --dark: #0f110c;
+            --primary: #FFCE00; /* Gold */
+            --accent: #E52B50;  /* Crane Red */
+            --forest: #1b3022;  /* Deep Green */
+            --bg: #0d0e0d;      /* Dark Mist */
+            --text: #f0f0f0;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
-        /* 1. LOADING SCREEN */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- ADVANCED LOADING ICON --- */
         #loader {
             position: fixed;
             inset: 0;
-            background: var(--dark);
-            z-index: 9999;
+            background: var(--bg);
+            z-index: 10000;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 1s ease;
+            flex-direction: column;
         }
-        .spinner {
-            width: 50px; height: 50px;
-            border: 5px solid var(--forest);
-            border-top: 5px solid var(--gold);
+        .loader-circle {
+            width: 80px; height: 80px;
+            border: 2px solid var(--glass);
+            border-top: 2px solid var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+        }
+        .loader-text {
+            margin-top: 20px;
+            font-family: 'Syne', sans-serif;
+            letter-spacing: 5px;
+            font-size: 0.7rem;
+            color: var(--primary);
+            animation: pulse 1.5s infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* GENERAL STYLES */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Outfit', sans-serif; background: var(--mist); color: var(--dark); overflow-x: hidden; }
-        
-        /* HERO & INTRO */
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            width: 20px; height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.15s ease-out;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 30px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass);
+        }
+        .logo { font-family: 'Syne', sans-serif; font-size: 1.5rem; letter-spacing: -1px; }
+        .logo span { color: var(--primary); }
+
+        /* --- HERO SECTION --- */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(255, 206, 0, 0.05) 0%, transparent 70%),
                         url('https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1600&q=80') center/cover;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;
-        }
-        .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 8vw, 6rem); text-transform: uppercase; line-height: 0.9; }
-        
-        .intro-section {
-            padding: 100px 10%;
-            background: white;
             text-align: center;
         }
-        .intro-section h2 { font-family: 'Syne', sans-serif; font-size: 2.5rem; margin-bottom: 20px; color: var(--forest); }
-        .intro-section p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; color: #555; line-height: 1.8; }
-
-        /* GRID LAYOUT */
-        .grid-container {
-            padding: 50px 6%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(4rem, 15vw, 10rem);
+            line-height: 0.8;
+            text-transform: uppercase;
         }
-        .section-heading { padding: 80px 6% 0; font-family: 'Syne', sans-serif; font-size: 2rem; border-bottom: 2px solid var(--gold); display: inline-block; margin-left: 6%; }
+
+        /* --- INTRO SECTION --- */
+        .intro {
+            padding: 150px 10%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .intro h2 { font-family: 'Syne', sans-serif; font-size: 3.5rem; color: var(--primary); line-height: 1; }
+        .intro p { font-size: 1.2rem; opacity: 0.7; line-height: 1.8; }
+
+        /* --- GRID CARDS --- */
+        .section-label { padding-left: 6%; font-size: 0.8rem; letter-spacing: 5px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 0 6% 100px;
+        }
 
         .card {
-            background: white;
-            border-radius: 20px;
+            height: 500px;
+            background: var(--card-bg);
+            border-radius: 40px;
             overflow: hidden;
+            position: relative;
             text-decoration: none;
-            color: inherit;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            color: white;
+            border: 1px solid var(--glass);
+            transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 250px; object-fit: cover; }
-        .card-body { padding: 25px; }
-        .card-body h3 { font-family: 'Syne', sans-serif; margin-bottom: 10px; color: var(--forest); }
-        .card-body p { font-size: 0.9rem; color: #666; }
+        .card:hover { transform: scale(0.98); border-color: var(--primary); }
+        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: 0.5s; }
+        .card:hover img { opacity: 0.8; scale: 1.05; }
 
-        footer { background: var(--dark); color: white; padding: 60px; text-align: center; margin-top: 100px; }
+        .card-info {
+            position: absolute;
+            bottom: 40px; left: 40px;
+            z-index: 2;
+        }
+        .card-info h3 { font-family: 'Syne', sans-serif; font-size: 2.2rem; margin-bottom: 5px; }
+
+        /* --- ETIQUETTE --- */
+        .etiquette {
+            background: #111;
+            padding: 100px 6%;
+            border-radius: 60px 60px 0 0;
+        }
+        .eti-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        .eti-card h4 { color: var(--primary); margin-bottom: 10px; font-family: 'Syne', sans-serif; }
+        .eti-card p { font-size: 0.9rem; opacity: 0.6; }
+
+        footer { padding: 50px; text-align: center; font-size: 0.8rem; opacity: 0.4; }
+
+        /* REVEAL ANIMATION */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <div class="spinner"></div>
-        <p style="color: white; margin-top: 20px; letter-spacing: 5px;">MATOOKE & MIST</p>
+        <div class="loader-circle"></div>
+        <div class="loader-text">MATOOKE & MIST</div>
     </div>
 
-    <nav style="position: absolute; top: 0; width: 100%; padding: 40px 6%; display: flex; justify-content: space-between; z-index: 10; color: white; font-weight: 800;">
-        <div style="font-size: 1.5rem;">M&M</div>
-        <div>EXPLORE</div>
+    <div id="cursor"></div>
+
+    <nav>
+        <div class="logo">MATOOKE<span>&MIST</span></div>
+        <div style="font-size: 0.7rem; letter-spacing: 2px;">UGANDA 2026</div>
     </nav>
 
     <header class="hero">
-        <h1>Matooke <br>& Mist</h1>
-        <p style="margin-top: 20px; font-size: 1.5rem; font-weight: 300;">The Pearl of Africa Unveiled</p>
+        <h1>THE<br><span style="color:var(--primary)">PEARL</span></h1>
     </header>
 
-    <section class="intro-section">
-        <h2>The People & The Beauty</h2>
-        <p>
-            Uganda is a tapestry of over 56 tribes, each woven together by a spirit of legendary hospitality. From the snow-capped Rwenzori peaks to the vibrant streets of Kampala, this is a land where the sun always shines on a green horizon. It is not just a destination; it is a feeling of home.
-        </p>
+    <section class="intro reveal">
+        <div>
+            <p style="color:var(--primary); margin-bottom: 10px;">— LAND OF GRACE</p>
+            <h2>The People & The Beauty</h2>
+        </div>
+        <div>
+            <p>Uganda is defined by its soul. It is a place where 56 tribes harmonize, creating a culture built on the foundation of "Ubuntu"—the belief that we are because you are. From the chaotic, colorful energy of Kampala to the silent, golden savannahs of the North, the beauty of the landscape is only matched by the warmth of its people.</p>
+        </div>
     </section>
 
-    <h2 class="section-heading">01. The 6 Flavors</h2>
-    <div class="grid-container">
-        <a href="food-luwombo.html" class="card">
-            <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=500&q=80" alt="Luwombo">
-            <div class="card-body"><h3>Luwombo</h3><p>The royal slow-cooked masterpiece.</p></div>
-        </a>
-        <a href="food-rolex.html" class="card">
-            <img src="https://images.unsplash.com/photo-1626700051175-656fc7bc31ee?auto=format&fit=crop&w=500&q=80" alt="Rolex">
-            <div class="card-body"><h3>The Rolex</h3><p>Uganda's iconic rolled street energy.</p></div>
-        </a>
-        <a href="food-matooke.html" class="card">
-            <img src="https://images.unsplash.com/photo-1528825831135-33b1b7a09dec?auto=format&fit=crop&w=500&q=80" alt="Matooke">
-            <div class="card-body"><h3>Matooke</h3><p>The green-gold heart of every meal.</p></div>
-        </a>
-        <a href="food-malewa.html" class="card">
-            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80" alt="Malewa">
-            <div class="card-body"><h3>Malewa</h3><p>Smoked bamboo shoots from the East.</p></div>
-        </a>
-        <a href="food-eshabwe.html" class="card">
-            <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=500&q=80" alt="Eshabwe">
-            <div class="card-body"><h3>Eshabwe</h3><p>The sophisticated ghee sauce of the West.</p></div>
-        </a>
-        <a href="food-kalo.html" class="card">
-            <img src="https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=500&q=80" alt="Kalo">
-            <div class="card-body"><h3>Kalo</h3><p>Nutritious millet bread, the warrior's fuel.</p></div>
-        </a>
+    <p class="section-label reveal">01 — The Six Flavors</p>
+    <div class="card-grid">
+        <a href="food-luwombo.html" class="card reveal"><img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Luwombo</h3></div></a>
+        <a href="food-rolex.html" class="card reveal"><img src="https://images.unsplash.com/photo-1626700051175-656fc7bc31ee?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>The Rolex</h3></div></a>
+        <a href="food-matooke.html" class="card reveal"><img src="https://images.unsplash.com/photo-1528825831135-33b1b7a09dec?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Matooke</h3></div></a>
+        <a href="food-malewa.html" class="card reveal"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Malewa</h3></div></a>
+        <a href="food-eshabwe.html" class="card reveal"><img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Eshabwe</h3></div></a>
+        <a href="food-kalo.html" class="card reveal"><img src="https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Kalo</h3></div></a>
     </div>
 
-    <h2 class="section-heading">02. The 5 Wonders</h2>
-    <div class="grid-container">
-        <a href="site-bwindi.html" class="card">
-            <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=500&q=80">
-            <div class="card-body"><h3>Bwindi Forest</h3><p>Deep mist and Mountain Gorillas.</p></div>
-        </a>
-        <a href="site-murchison.html" class="card">
-            <img src="https://images.unsplash.com/photo-1533230408708-8f9f91d12344?auto=format&fit=crop&w=500&q=80">
-            <div class="card-body"><h3>Murchison Falls</h3><p>Where the Nile explodes through rock.</p></div>
-        </a>
-        <a href="site-bunyonyi.html" class="card">
-            <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=500&q=80">
-            <div class="card-body"><h3>Lake Bunyonyi</h3><p>The place of many little birds.</p></div>
-        </a>
-        <a href="site-rwenzori.html" class="card">
-            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80">
-            <div class="card-body"><h3>Rwenzori Peaks</h3><p>The legendary Mountains of the Moon.</p></div>
-        </a>
-        <a href="site-jinja.html" class="card">
-            <img src="https://images.unsplash.com/photo-1518218811728-66a9f8348827?auto=format&fit=crop&w=500&q=80">
-            <div class="card-body"><h3>Source of the Nile</h3><p>The beginning of the world's longest river.</p></div>
-        </a>
+    <p class="section-label reveal">02 — The Five Wonders</p>
+    <div class="card-grid">
+        <a href="site-bwindi.html" class="card reveal"><img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Bwindi Forest</h3></div></a>
+        <a href="site-murchison.html" class="card reveal"><img src="https://images.unsplash.com/photo-1533230408708-8f9f91d12344?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Murchison Falls</h3></div></a>
+        <a href="site-bunyonyi.html" class="card reveal"><img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Lake Bunyonyi</h3></div></a>
+        <a href="site-rwenzori.html" class="card reveal"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>Rwenzori Peaks</h3></div></a>
+        <a href="site-jinja.html" class="card reveal"><img src="https://images.unsplash.com/photo-1518218811728-66a9f8348827?auto=format&fit=crop&w=800&q=80"><div class="card-info"><h3>The Nile Source</h3></div></a>
     </div>
+
+    <section class="etiquette reveal">
+        <h2 style="font-family: 'Syne'; font-size: 3rem;">Respecting the Culture</h2>
+        <div class="eti-grid">
+            <div class="eti-card"><h4>The Right Hand</h4><p>Use your right hand for everything—eating, giving, and greeting. It is the hand of honor.</p></div>
+            <div class="eti-card"><h4>Modesty</h4><p>Ugandans value smartness. In rural areas, keeping knees covered shows respect to elders.</p></div>
+            <div class="eti-card"><h4>Hospitality</h4><p>If offered food, accept a small amount. It is the ultimate sign of friendship.</p></div>
+            <div class="eti-card"><h4>Greetings</h4><p>Never rush. A simple "Osiibye otyanno" (How is your day?) opens every door.</p></div>
+        </div>
+    </section>
 
     <footer>
-        <p>&copy; 2026 Matooke & Mist. Authentic Uganda.</p>
+        &copy; 2026 MATOOKE & MIST — DESIGNED FOR THE BOLD.
     </footer>
 
     <script>
-        // Remove loader when page is ready
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 1000);
-            }, 1500); // 1.5s delay for cool effect
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
         });
+
+        // Hover Effect for Cursor
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('mouseenter', () => cursor.style.transform = 'scale(4)');
+            link.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
+        });
+
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+            }, 2000);
+        });
+
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
