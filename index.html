@@ -3,236 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JamboUG | Explore the Pearl</title>
+    <title>Matooke and Mist | The Soul of Uganda</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #FFCE00; /* Ugandan Gold */
-            --accent: #E52B50;  /* Crane Red */
-            --bg: #0a0a0a;      /* Deep Charcoal */
-            --card-bg: #1a1a1a;
-            --text: #ffffff;
-            --glass: rgba(255, 255, 255, 0.05);
+            --mist: #f4f4f4;
+            --forest: #1b3022;
+            --gold: #ffce00;
+            --accent: #e52b50;
+            --dark: #0f110c;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; } /* Custom cursor active */
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.4;
-        }
-
-        /* Custom Cursor */
-        #cursor {
-            width: 20px; height: 20px;
-            background: var(--primary);
-            border-radius: 50%;
+        /* 1. LOADING SCREEN */
+        #loader {
             position: fixed;
-            pointer-events: none;
+            inset: 0;
+            background: var(--dark);
             z-index: 9999;
-            transition: transform 0.1s ease;
-        }
-
-        /* Animated Navigation */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 30px 6%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            mix-blend-mode: difference;
-        }
-
-        .logo { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
-        .logo span { color: var(--primary); }
-
-        /* Hero with Perspective */
-        .hero {
-            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at center, rgba(30, 81, 40, 0.4) 0%, transparent 70%),
-                        url('https://images.unsplash.com/photo-1518218811728-66a9f8348827?auto=format&fit=crop&w=1600&q=80') center/cover;
-            perspective: 1000px;
+            transition: opacity 1s ease;
         }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid var(--forest);
+            border-top: 5px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .hero h1 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(3rem, 10vw, 8rem);
-            line-height: 0.9;
-            text-transform: uppercase;
+        /* GENERAL STYLES */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--mist); color: var(--dark); overflow-x: hidden; }
+        
+        /* HERO & INTRO */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1600&q=80') center/cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;
+        }
+        .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 8vw, 6rem); text-transform: uppercase; line-height: 0.9; }
+        
+        .intro-section {
+            padding: 100px 10%;
+            background: white;
             text-align: center;
         }
+        .intro-section h2 { font-family: 'Syne', sans-serif; font-size: 2.5rem; margin-bottom: 20px; color: var(--forest); }
+        .intro-section p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; color: #555; line-height: 1.8; }
 
-        /* Magnetic Button */
-        .cta-btn {
-            margin-top: 40px;
-            padding: 20px 40px;
-            background: var(--primary);
-            color: black;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 800;
-            text-transform: uppercase;
-            transition: 0.3s;
-            position: relative;
+        /* GRID LAYOUT */
+        .grid-container {
+            padding: 50px 6%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
+        .section-heading { padding: 80px 6% 0; font-family: 'Syne', sans-serif; font-size: 2rem; border-bottom: 2px solid var(--gold); display: inline-block; margin-left: 6%; }
 
-        .cta-btn:hover { transform: scale(1.1); background: white; }
-
-        /* Draggable Grid with 3D Tilt */
-        .section-header { padding: 100px 6% 40px; }
-        .section-header h2 { font-family: 'Syne', sans-serif; font-size: 3rem; }
-
-        .drag-wrapper {
-            padding: 20px 6%;
-            display: flex;
-            gap: 40px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-        }
-
-        .drag-wrapper::-webkit-scrollbar { display: none; }
-
-        .cool-card {
-            min-width: 400px;
-            height: 500px;
-            background: var(--card-bg);
-            border-radius: 30px;
+        .card {
+            background: white;
+            border-radius: 20px;
             overflow: hidden;
-            position: relative;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,255,255,0.1);
+            text-decoration: none;
+            color: inherit;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 250px; object-fit: cover; }
+        .card-body { padding: 25px; }
+        .card-body h3 { font-family: 'Syne', sans-serif; margin-bottom: 10px; color: var(--forest); }
+        .card-body p { font-size: 0.9rem; color: #666; }
 
-        .cool-card:hover { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
-
-        .cool-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: 0.5s; }
-        .cool-card:hover img { opacity: 0.9; scale: 1.1; }
-
-        .card-meta {
-            position: absolute;
-            bottom: 30px; left: 30px;
-            z-index: 2;
-        }
-
-        .card-meta h3 { font-family: 'Syne', sans-serif; font-size: 2rem; margin-bottom: 5px; }
-        .tag { background: var(--primary); color: black; padding: 5px 12px; border-radius: 5px; font-size: 0.8rem; font-weight: bold; }
-
-        /* Parallax Section */
-        .parallax-box {
-            height: 60vh;
-            margin: 100px 6%;
-            border-radius: 40px;
-            background: fixed center/cover url('https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1600&q=80');
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .parallax-box h2 { font-size: 4rem; text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-
-        footer { padding: 100px 6%; border-top: 1px solid var(--glass); text-align: center; opacity: 0.6; }
-
+        footer { background: var(--dark); color: white; padding: 60px; text-align: center; margin-top: 100px; }
     </style>
 </head>
 <body>
 
-    <div id="cursor"></div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="color: white; margin-top: 20px; letter-spacing: 5px;">MATOOKE & MIST</p>
+    </div>
 
-    <nav>
-        <div class="logo">Jambo<span>UG</span></div>
-        <div>STORY — FLAVOR — WILD</div>
+    <nav style="position: absolute; top: 0; width: 100%; padding: 40px 6%; display: flex; justify-content: space-between; z-index: 10; color: white; font-weight: 800;">
+        <div style="font-size: 1.5rem;">M&M</div>
+        <div>EXPLORE</div>
     </nav>
 
     <header class="hero">
-        <h1 data-speed="2">UGANDA<br><span style="color:var(--primary)">UNFILTERED</span></h1>
-        <a href="#" class="cta-btn">Start the Journey</a>
+        <h1>Matooke <br>& Mist</h1>
+        <p style="margin-top: 20px; font-size: 1.5rem; font-weight: 300;">The Pearl of Africa Unveiled</p>
     </header>
 
-    <div class="section-header">
-        <p style="color:var(--primary); letter-spacing: 3px;">01. THE TASTE</p>
-        <h2>Soul Food</h2>
+    <section class="intro-section">
+        <h2>The People & The Beauty</h2>
+        <p>
+            Uganda is a tapestry of over 56 tribes, each woven together by a spirit of legendary hospitality. From the snow-capped Rwenzori peaks to the vibrant streets of Kampala, this is a land where the sun always shines on a green horizon. It is not just a destination; it is a feeling of home.
+        </p>
+    </section>
+
+    <h2 class="section-heading">01. The 6 Flavors</h2>
+    <div class="grid-container">
+        <a href="food-luwombo.html" class="card">
+            <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=500&q=80" alt="Luwombo">
+            <div class="card-body"><h3>Luwombo</h3><p>The royal slow-cooked masterpiece.</p></div>
+        </a>
+        <a href="food-rolex.html" class="card">
+            <img src="https://images.unsplash.com/photo-1626700051175-656fc7bc31ee?auto=format&fit=crop&w=500&q=80" alt="Rolex">
+            <div class="card-body"><h3>The Rolex</h3><p>Uganda's iconic rolled street energy.</p></div>
+        </a>
+        <a href="food-matooke.html" class="card">
+            <img src="https://images.unsplash.com/photo-1528825831135-33b1b7a09dec?auto=format&fit=crop&w=500&q=80" alt="Matooke">
+            <div class="card-body"><h3>Matooke</h3><p>The green-gold heart of every meal.</p></div>
+        </a>
+        <a href="food-malewa.html" class="card">
+            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80" alt="Malewa">
+            <div class="card-body"><h3>Malewa</h3><p>Smoked bamboo shoots from the East.</p></div>
+        </a>
+        <a href="food-eshabwe.html" class="card">
+            <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=500&q=80" alt="Eshabwe">
+            <div class="card-body"><h3>Eshabwe</h3><p>The sophisticated ghee sauce of the West.</p></div>
+        </a>
+        <a href="food-kalo.html" class="card">
+            <img src="https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=500&q=80" alt="Kalo">
+            <div class="card-body"><h3>Kalo</h3><p>Nutritious millet bread, the warrior's fuel.</p></div>
+        </a>
     </div>
 
-    <div class="drag-wrapper" id="slider">
-        <div class="cool-card">
-            <img src="https://images.unsplash.com/photo-1626700051175-656fc7bc31ee?auto=format&fit=crop&w=800&q=80">
-            <div class="card-meta">
-                <span class="tag">STREET FOOD</span>
-                <h3>The Rolex</h3>
-            </div>
-        </div>
-        <div class="cool-card">
-            <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=800&q=80">
-            <div class="card-meta">
-                <span class="tag">ROYALTY</span>
-                <h3>Luwombo</h3>
-            </div>
-        </div>
-        <div class="cool-card">
-            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80">
-            <div class="card-meta">
-                <span class="tag">GRILLED</span>
-                <h3>Muchomo</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="parallax-box">
-        <h2>KING OF THE JUNGLE</h2>
+    <h2 class="section-heading">02. The 5 Wonders</h2>
+    <div class="grid-container">
+        <a href="site-bwindi.html" class="card">
+            <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=500&q=80">
+            <div class="card-body"><h3>Bwindi Forest</h3><p>Deep mist and Mountain Gorillas.</p></div>
+        </a>
+        <a href="site-murchison.html" class="card">
+            <img src="https://images.unsplash.com/photo-1533230408708-8f9f91d12344?auto=format&fit=crop&w=500&q=80">
+            <div class="card-body"><h3>Murchison Falls</h3><p>Where the Nile explodes through rock.</p></div>
+        </a>
+        <a href="site-bunyonyi.html" class="card">
+            <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=500&q=80">
+            <div class="card-body"><h3>Lake Bunyonyi</h3><p>The place of many little birds.</p></div>
+        </a>
+        <a href="site-rwenzori.html" class="card">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80">
+            <div class="card-body"><h3>Rwenzori Peaks</h3><p>The legendary Mountains of the Moon.</p></div>
+        </a>
+        <a href="site-jinja.html" class="card">
+            <img src="https://images.unsplash.com/photo-1518218811728-66a9f8348827?auto=format&fit=crop&w=500&q=80">
+            <div class="card-body"><h3>Source of the Nile</h3><p>The beginning of the world's longest river.</p></div>
+        </a>
     </div>
 
     <footer>
-        <p>&copy; 2026 JamboUG. Built for the bold traveller.</p>
+        <p>&copy; 2026 Matooke & Mist. Authentic Uganda.</p>
     </footer>
 
     <script>
-        // 1. Custom Cursor Movement
-        const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-
-        // 2. Drag to Scroll with Velocity
-        const slider = document.getElementById('slider');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            slider.style.cursor = 'grabbing';
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-        });
-        slider.addEventListener('mouseleave', () => isDown = false);
-        slider.addEventListener('mouseup', () => {
-            isDown = false;
-            slider.style.cursor = 'grab';
-        });
-        slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 2;
-            slider.scrollLeft = scrollLeft - walk;
-        });
-
-        // 3. Simple Parallax Effect on Hero Text
-        window.addEventListener('scroll', () => {
-            const scroll = window.pageYOffset;
-            const heroText = document.querySelector('.hero h1');
-            heroText.style.transform = `translateY(${scroll * 0.4}px)`;
+        // Remove loader when page is ready
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 1000);
+            }, 1500); // 1.5s delay for cool effect
         });
     </script>
 </body>
